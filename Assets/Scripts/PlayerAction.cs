@@ -85,6 +85,7 @@ public class PlayerAction : MonoBehaviour
 		}
 	}
 
+	//캐릭터 움직임
 	private void FixedUpdate()
 	{
 		Vector2 moveVec = isHorizonMove ? new Vector2(horizontal, 0) : new Vector2(0, vertical);
