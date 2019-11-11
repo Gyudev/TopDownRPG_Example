@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerAction : MonoBehaviour
 {
+	private GameManager gameManager;
+
 	private float playerSpeed = 5;
 
 	private float horizontal;
@@ -22,6 +24,7 @@ public class PlayerAction : MonoBehaviour
 	{
 		playerRigid = GetComponent<Rigidbody2D>();
 		playerAnim = GetComponent<Animator>();
+		gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 	}
 
 	private void Update()
@@ -81,7 +84,7 @@ public class PlayerAction : MonoBehaviour
 
 		if (Input.GetButtonDown("Jump") && scanObject != null)
 		{
-			Debug.Log(scanObject.name);
+			gameManager.Action(scanObject);
 		}
 	}
 

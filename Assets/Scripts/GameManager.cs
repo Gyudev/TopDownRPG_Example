@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	private Text talkText;
+	private GameObject scanObject;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	private void Start()
+	{
+		talkText = GameObject.Find("Canvas").transform.Find("Image").GetComponentInChildren<Text>();
+	}
+
+	public void Action(GameObject gameObj)
+	{
+		scanObject = gameObj;
+		talkText.text = scanObject.name + "입니다.";
+	}
 }
