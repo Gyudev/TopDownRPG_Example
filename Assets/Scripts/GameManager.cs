@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 	private TalkManager talkManager;
+	public QuestManager questManager;
 
 	private Text talkText;
 	private Image portraitImg;
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
 	private void Start()
 	{
 		talkManager = GameObject.Find("TalkManager").GetComponent<TalkManager>();
+		questManager = GameObject.Find("QuestManager").GetComponent<QuestManager>();
 		talkText = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponentInChildren<Text>();
 		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Transform>();
 		portraitImg =talkPanel.transform.Find("Portrait").GetComponent<Image>();
@@ -36,12 +38,14 @@ public class GameManager : MonoBehaviour
 
 	private void Talk(int id, bool isNPC)
 	{
-		string talkData = talkManager.GetTalk(id, talkIndex);
+		int questTalkIndex = questManager.GetQuestTalkIndex(id);
+		string talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
 
 		if(talkData == null)
 		{
 			isAction = false;
 			talkIndex = 0;
+			questManager.CheckQuest();
 			return;
 		}
 		if (isNPC)
