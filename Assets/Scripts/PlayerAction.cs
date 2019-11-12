@@ -29,13 +29,13 @@ public class PlayerAction : MonoBehaviour
 
 	private void Update()
 	{
-		horizontal = Input.GetAxisRaw("Horizontal");
-		vertical = Input.GetAxisRaw("Vertical");
+		horizontal = gameManager.isAction ? 0 : Input.GetAxisRaw("Horizontal");
+		vertical = gameManager.isAction ? 0 : Input.GetAxisRaw("Vertical");
 
-		bool horizontalDown = Input.GetButtonDown("Horizontal");
-		bool verticalDown = Input.GetButtonDown("Vertical");
-		bool horizontalUp = Input.GetButtonUp("Horizontal");
-		bool verticalUp = Input.GetButtonUp("Vertical");
+		bool horizontalDown = gameManager.isAction ? false : Input.GetButtonDown("Horizontal");
+		bool verticalDown = gameManager.isAction ? false : Input.GetButtonDown("Vertical");
+		bool horizontalUp = gameManager.isAction ? false : Input.GetButtonUp("Horizontal");
+		bool verticalUp = gameManager.isAction ? false : Input.GetButtonUp("Vertical");
 
 		if (horizontalDown || verticalUp)
 		{
