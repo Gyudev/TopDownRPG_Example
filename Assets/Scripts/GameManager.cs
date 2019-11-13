@@ -25,9 +25,10 @@ public class GameManager : MonoBehaviour
 	{
 		talkManager = GameObject.Find("TalkManager").GetComponent<TalkManager>();
 		questManager = GameObject.Find("QuestManager").GetComponent<QuestManager>();
-		typeEffect = talkPanel.transform.Find("Text").GetComponent<TypeEffect>();
+		
 		//talkText = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponentInChildren<Text>();
 		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Animator>();
+		typeEffect = talkPanel.transform.Find("Text").GetComponent<TypeEffect>();
 		portraitImg = talkPanel.transform.Find("Portrait").GetComponent<Image>();
 		portraitAnim = talkPanel.transform.Find("Portrait").GetComponent<Animator>();
 
@@ -47,8 +48,19 @@ public class GameManager : MonoBehaviour
 
 	private void Talk(int id, bool isNPC)
 	{
-		int questTalkIndex = questManager.GetQuestTalkIndex(id);
-		string talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
+		int questTalkIndex = 0;
+		string talkData = "";
+
+		if (typeEffect.isAnim)
+		{
+			typeEffect.SetMsg("");
+			return;
+		}
+		else
+		{
+			questTalkIndex = questManager.GetQuestTalkIndex(id);
+			talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
+		}
 
 		if(talkData == null)
 		{

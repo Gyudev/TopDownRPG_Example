@@ -5,33 +5,53 @@ using UnityEngine.UI;
 
 public class TypeEffect : MonoBehaviour
 {
-	private GameObject talkPanel;
-	private GameObject endCursor;
+	private Transform talkPanel;
+	private Transform endCursor;
+	public bool isAnim;
 
-	private int CharPerSeconds = 10;
-	private string targetMsg;
 	private Text msgText;
+	private AudioSource audioSource;
+
+	private int CharPerSeconds = 15;
+	private string targetMsg;
 	private int index;
+
+	private float interval;
 
 	private void Awake()
 	{
-		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<GameObject>();
-		endCursor = talkPanel.transform.Find("End Cursor").GetComponent<GameObject>();
+		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Transform>();
+		endCursor = talkPanel.transform.Find("End Cursor").GetComponent<Transform>();
 		msgText = GetComponent<Text>();
+		audioSource = GetComponent<AudioSource>();
 	}
 
 	public void SetMsg(string msg)
 	{
-		targetMsg = msg;
-		EffectStart();
+		if (isAnim)
+		{
+			msgText.text = targetMsg;
+			CancelInvoke();
+			EffectEnd();
+		}
+		else
+		{
+			targetMsg = msg;
+			EffectStart();
+		}
 	}
 
 	private void EffectStart()
 	{
 		msgText.text = "";
 		index = 0;
-		endCursor.SetActive(false);
-		Invoke("Effecting", 1 / CharPerSeconds);
+		endCursor.gameObject.SetActive(false);
+
+		interval = 1.0f / CharPerSeconds;
+		Debug.Log(interval);
+
+		isAnim = true;
+		Invoke("Effecting", interval);
 	}
 
 	private void Effecting()
@@ -42,13 +62,20 @@ public class TypeEffect : MonoBehaviour
 			return;
 		}
 		msgText.text += targetMsg[index];
+		//사운드
+		if(targetMsg[index] != ' ' || targetMsg[index] != '.')
+		{
+			audioSource.Play();
+		}
+
 		index++;
 
-		Invoke("Effecting", 1 / CharPerSeconds);
+		Invoke("Effecting", interval);
 	}
 
 	private void EffectEnd()
 	{
-		endCursor.SetActive(true);
+		isAnim = false;
+		endCursor.gameObject.SetActive(true);
 	}
 }
