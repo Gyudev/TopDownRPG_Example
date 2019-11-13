@@ -7,10 +7,15 @@ public class GameManager : MonoBehaviour
 {
 	private TalkManager talkManager;
 	private QuestManager questManager;
+	private TypeEffect typeEffect;
 
-	private Text talkText;
+	//private Text talkText;
 	private Image portraitImg;
-	private Transform talkPanel;
+
+	private Animator talkPanel;
+	private Animator portraitAnim;
+	private Sprite prevPortrait;
+
 	private GameObject scanObject;
 
 	public bool isAction;
@@ -20,9 +25,11 @@ public class GameManager : MonoBehaviour
 	{
 		talkManager = GameObject.Find("TalkManager").GetComponent<TalkManager>();
 		questManager = GameObject.Find("QuestManager").GetComponent<QuestManager>();
-		talkText = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponentInChildren<Text>();
-		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Transform>();
-		portraitImg =talkPanel.transform.Find("Portrait").GetComponent<Image>();
+		typeEffect = talkPanel.transform.Find("Text").GetComponent<TypeEffect>();
+		//talkText = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponentInChildren<Text>();
+		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Animator>();
+		portraitImg = talkPanel.transform.Find("Portrait").GetComponent<Image>();
+		portraitAnim = talkPanel.transform.Find("Portrait").GetComponent<Animator>();
 
 		Debug.Log(questManager.CheckQuest());
 	}
@@ -35,7 +42,7 @@ public class GameManager : MonoBehaviour
 		Talk(objData.id, objData.isNPC);
 
 
-		talkPanel.gameObject.SetActive(isAction);
+		talkPanel.SetBool("isShow", isAction);
 	}
 
 	private void Talk(int id, bool isNPC)
@@ -52,14 +59,20 @@ public class GameManager : MonoBehaviour
 		}
 		if (isNPC)
 		{
-			talkText.text = talkData.Split(':')[0];
+			typeEffect.SetMsg(talkData.Split(':')[0]);
 			portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
 			portraitImg.color = new Color(1, 1, 1, 1);
+
+			//초상화 이펙트
+			if(prevPortrait != portraitImg.sprite)
+			{
+				portraitAnim.SetTrigger("doEffect");
+				prevPortrait = portraitImg.sprite;
+			}
 		}
 		else
 		{
-			talkText.text = talkData;
-
+			typeEffect.SetMsg(talkData);
 			portraitImg.color = new Color(1, 1, 1, 0);
 		}
 
