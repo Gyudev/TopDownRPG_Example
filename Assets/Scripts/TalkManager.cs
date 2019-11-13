@@ -26,7 +26,15 @@ public class TalkManager : MonoBehaviour
 
 		//퀘스트 데이터
 		talkData.Add(10 + 1000, new string[] { "반가워:0","모험가가 되고싶은거야?:1", "남서쪽 나무 밑에 구린스가 알려줄거야.:2" });
-		talkData.Add(11 + 2000, new string[] { "뭐야?:4", "모험가가 되고싶다고?:1", "그럼 어딘가 떨어진 내 동전좀 찾아와.:2" });
+		talkData.Add(11 + 2000, new string[] { "뭐야?:3", "모험가가 되고싶다고?:1", "그럼 어딘가 떨어진 내 동전좀 찾아와.:2" });
+
+		talkData.Add(20 + 1000, new string[] { "구린스의 동전?:3", "어디 떨어뜨렸데?:1", "몰라? 한마디 해야겠네.:2" });
+		talkData.Add(20 + 2000, new string[] { "얼른 찾아줘..:0"});
+
+		talkData.Add(20 + 5000, new string[] { "구린스의 동전인거 같다." });
+
+		talkData.Add(21 + 2000, new string[] { "고마워!:2" });
+
 
 		portraitData.Add(1000 + 0, portraitArr[0]);
 		portraitData.Add(1000 + 1, portraitArr[1]);

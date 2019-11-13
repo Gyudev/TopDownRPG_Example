@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
 	private TalkManager talkManager;
-	public QuestManager questManager;
+	private QuestManager questManager;
 
 	private Text talkText;
 	private Image portraitImg;
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
 		{
 			isAction = false;
 			talkIndex = 0;
-			questManager.CheckQuest();
+			Debug.Log(questManager.CheckQuest(id));
 			return;
 		}
 		if (isNPC)
