@@ -23,6 +23,8 @@ public class GameManager : MonoBehaviour
 		talkText = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponentInChildren<Text>();
 		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Transform>();
 		portraitImg =talkPanel.transform.Find("Portrait").GetComponent<Image>();
+
+		Debug.Log(questManager.CheckQuest());
 	}
 
 	public void Action(GameObject gameObj)

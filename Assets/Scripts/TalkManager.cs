@@ -48,7 +48,24 @@ public class TalkManager : MonoBehaviour
 
 	public string GetTalk(int id, int talkIndex)
 	{
-		if(talkIndex == talkData[id].Length)
+		//예외처리 (다듬은 로직)
+		if (!talkData.ContainsKey(id))
+		{
+			if (!talkData.ContainsKey(id - id % 10))
+			{
+				//퀘스트의 처음 대사마저 없을 때
+				//기본 대사를 가지고 옴.
+				return GetTalk(id - id % 100, talkIndex);
+			}
+			else
+			{
+				//해당 퀘스트 진행 순서 대사가 없을 때
+				//퀘스트 맨 처음 대사를 가지고 옴.
+				return GetTalk(id - id % 10, talkIndex);
+			}
+		}
+
+		if (talkIndex == talkData[id].Length)
 		{
 			return null;
 		}
@@ -56,6 +73,45 @@ public class TalkManager : MonoBehaviour
 		{
 			return talkData[id][talkIndex];
 		}
+		//예외처리 (안 다듬은 로직)
+		/*if (!talkData.ContainsKey(id))
+		{
+			if (!talkData.ContainsKey(id - id % 10))
+			{
+				//퀘스트의 처음 대사마저 없을 때
+				//기본 대사를 가지고 옴.
+				if (talkIndex == talkData[id - id % 100].Length)
+				{
+					return null;
+				}
+				else
+				{
+					return talkData[id - id % 100][talkIndex];
+				}
+			}
+			else
+			{
+				//해당 퀘스트 진행 순서 대사가 없을 때
+				//퀘스트 맨 처음 대사를 가지고 옴.
+				if (talkIndex == talkData[id - id % 10].Length)
+				{
+					return null;
+				}
+				else
+				{
+					return talkData[id - id % 10][talkIndex];
+				}
+			}
+		}
+
+		if(talkIndex == talkData[id].Length)
+		{
+			return null;
+		}
+		else
+		{
+			return talkData[id][talkIndex];
+		}*/
 	}
 
 	public Sprite GetPortrait(int id, int portraitIndex)

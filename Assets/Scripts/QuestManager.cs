@@ -5,7 +5,7 @@ using UnityEngine;
 public class QuestManager : MonoBehaviour
 {
 	private int questId = 10;
-	private int questActionIndex = 0;
+	public int questActionIndex = 0;
 	public GameObject[] questObject;
 
 	private Dictionary<int, QuestData> questList;
@@ -19,7 +19,8 @@ public class QuestManager : MonoBehaviour
 	private void GenerateData()
 	{
 		questList.Add(10, new QuestData("마을 사람들과 대화하기.", new int[] { 1000, 2000 }));
-		questList.Add(20, new QuestData("구린스의 동전 찾아주기.", new int[] { 100, 200 }));
+		questList.Add(20, new QuestData("구린스의 동전 찾아주기.", new int[] { 5000, 2000 }));
+		questList.Add(30, new QuestData("퀘스트 올 클리어!.", new int[] { 0 }));
 	}
 
 	public int GetQuestTalkIndex(int id)
@@ -41,6 +42,11 @@ public class QuestManager : MonoBehaviour
 			NextQuest();
 		}
 
+		return questList[questId].questName;
+	}
+
+	public string CheckQuest()
+	{
 		return questList[questId].questName;
 	}
 
