@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class QuestManager : MonoBehaviour
 {
-	private int questId = 10;
+	public int questId = 10;
 	public int questActionIndex = 0;
 	public GameObject[] questObject;
 
@@ -56,7 +56,7 @@ public class QuestManager : MonoBehaviour
 		questActionIndex = 0;
 	}
 
-	private void ControlObject()
+	public void ControlObject()
 	{
 		switch (questId)
 		{
@@ -67,7 +67,11 @@ public class QuestManager : MonoBehaviour
 				}
 				break;
 			case 20:
-				if (questActionIndex == 1)
+				if (questActionIndex == 0) 
+				{
+					questObject[0].SetActive(true);
+				}
+				else if (questActionIndex == 1)
 				{
 					questObject[0].SetActive(false);
 				}

@@ -11,13 +11,22 @@ public class GameManager : MonoBehaviour
 
 	//private Text talkText;
 	private Image portraitImg;
+	private Sprite prevPortrait;
 
 	private Animator talkPanel;
 	private Animator portraitAnim;
-	private Sprite prevPortrait;
 
 	private GameObject scanObject;
+	private Transform player;
 
+	private Transform menuSet;
+	private Transform buttonPanel;
+
+	private Text questText;
+
+	private Button exitButton;
+	private Button saveButton;
+	
 	public bool isAction;
 	public int talkIndex;
 
@@ -25,14 +34,43 @@ public class GameManager : MonoBehaviour
 	{
 		talkManager = GameObject.Find("TalkManager").GetComponent<TalkManager>();
 		questManager = GameObject.Find("QuestManager").GetComponent<QuestManager>();
-		
+		player = GameObject.Find("Player").GetComponent<Transform>();
+
 		//talkText = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponentInChildren<Text>();
 		talkPanel = GameObject.Find("Canvas").transform.Find("Talk Set").GetComponent<Animator>();
 		typeEffect = talkPanel.transform.Find("Text").GetComponent<TypeEffect>();
 		portraitImg = talkPanel.transform.Find("Portrait").GetComponent<Image>();
 		portraitAnim = talkPanel.transform.Find("Portrait").GetComponent<Animator>();
+		menuSet = GameObject.Find("Canvas").transform.Find("Menu Set").GetComponent<Transform>();
+		questText =menuSet.transform.Find("Quest Panel").GetComponentInChildren<Text>();
+		buttonPanel = menuSet.transform.Find("Button Panel").GetComponent<Transform>();
 
-		Debug.Log(questManager.CheckQuest());
+		exitButton = buttonPanel.transform.Find("Exit").GetComponent<Button>();
+		exitButton.onClick.AddListener(GameExit);
+
+		saveButton = buttonPanel.transform.Find("Save").GetComponent<Button>();
+		saveButton.onClick.AddListener(GameSave);
+
+		GameLoad();
+		questText.text = questManager.CheckQuest();
+	}
+
+	private void Update()
+	{
+		//서브 메뉴
+		if (Input.GetButtonDown("Cancel"))
+		{
+			if (menuSet.gameObject.activeSelf)
+			{
+				menuSet.gameObject.SetActive(false);
+				Time.timeScale = 1;
+			}
+			else
+			{
+				Time.timeScale = 0;
+				menuSet.gameObject.SetActive(true);
+			}
+		}
 	}
 
 	public void Action(GameObject gameObj)
@@ -66,7 +104,7 @@ public class GameManager : MonoBehaviour
 		{
 			isAction = false;
 			talkIndex = 0;
-			Debug.Log(questManager.CheckQuest(id));
+			questText.text = questManager.CheckQuest(id);
 			return;
 		}
 		if (isNPC)
@@ -90,5 +128,46 @@ public class GameManager : MonoBehaviour
 
 		isAction = true;
 		talkIndex++;
+	}
+
+	private void GameSave()
+	{
+		//플레이어 x, y좌표
+		//퀘스트 id, Action Index
+		PlayerPrefs.SetFloat("PlayerX", player.position.x);
+		PlayerPrefs.SetFloat("PlayerY", player.position.y);
+		PlayerPrefs.SetInt("QuestId", questManager.questId);
+		PlayerPrefs.SetInt("QuestActionIndex", questManager.questActionIndex);
+		PlayerPrefs.Save();
+
+		menuSet.gameObject.SetActive(false);
+		Time.timeScale = 1;
+
+	}
+
+	private void GameLoad()
+	{
+		if (!PlayerPrefs.HasKey("PlayerX"))
+		{
+			return;
+		}
+		else
+		{
+
+			float x = PlayerPrefs.GetFloat("PlayerX");
+			float y = PlayerPrefs.GetFloat("PlayerY");
+			int questId = PlayerPrefs.GetInt("QuestId");
+			int questActionIndex = PlayerPrefs.GetInt("QuestActionIndex");
+
+			player.position = new Vector3(x, y, -1);
+			questManager.questId = questId;
+			questManager.questActionIndex = questActionIndex;
+			questManager.ControlObject();
+		}
+	}
+
+	private void GameExit()
+	{
+		Application.Quit();
 	}
 }
